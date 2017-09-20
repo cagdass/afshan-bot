@@ -79,7 +79,7 @@ def save():
     json.dump(user_links, open('user_links.txt', 'w'))
 
 def start(bot, update):
-    global b
+    global b,usernames,user_links,links
     i1 = update.message.chat_id
     i2 = update.message.from_user.username
     update_dict(i1,i2)
@@ -87,7 +87,9 @@ def start(bot, update):
     if update.message.from_user.username == 'cagdas':
         b = bot
         update.message.reply_text('Bot set')
+        print 'Preload {} {} {}'.format(usernames,user_links,links)
         load()
+        print 'Postload {} {} {}'.format(usernames,user_links,links)
         update.message.reply_text('Loaded')
     elif update.message.from_user.username == 'abdullahwali':
         message = 'Shut the fuck up Wali'
