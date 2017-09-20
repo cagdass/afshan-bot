@@ -1,3 +1,3 @@
 # Afshan Bot
 
-A Telegram bot that sends you the the text and the images from Afshan's columns in Bilnews about as soon as they are out.
+A Telegram bot, (@afshanwrites_bot)[https://telegram.me/afshanwrites_bot], that sends you the the text and the images from Afshan's columns in Bilnews about as soon as they are out.
