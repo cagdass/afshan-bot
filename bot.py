@@ -111,13 +111,11 @@ def add_user(id):
     global user_links
     if id not in user_links:
         user_links[id] = []
-        save()
 
 def remove_user(id):
     global user_links
     if id in user_links:
         del user_links[id]
-        save()
 
 def error(bot, update, error):
     logger.warn('Update "%s" caused error "%s"' % (update, error))
