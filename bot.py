@@ -44,6 +44,7 @@ def u2():
         user['username'] = usernames[key]
         if key in user_links.keys():
             user['user_link'] = user_links[key]
+        users.append(user)
 
 def getClient():
     global host, port
