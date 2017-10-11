@@ -107,7 +107,7 @@ def load():
     u1()
 
 def save(bot, update):
-    global users, links, databaseName
+    global users, links, databaseName, usernames, user_links
     u2()
 
     client = getClient()
@@ -116,6 +116,7 @@ def save(bot, update):
     linkCollection = db['links']
 
     print 'Saving'
+    print usernames, user_links,
     print users, links
 
     for user in users:
