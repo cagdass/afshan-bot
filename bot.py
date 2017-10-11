@@ -9,15 +9,44 @@ import json
 import string
 from bs4 import BeautifulSoup
 import requests
+from pymongo import MongoClient
 from telegram.error import (TelegramError, Unauthorized, BadRequest,
                             TimedOut, ChatMigrated, NetworkError)
 
+host = 'localhost'
+port = 27017
+databaseName = 'afshanbot'
+
+users = []
 usernames = {}
 links = []
 user_links = {}
 link = ''
 canStop = False
 b = ''
+
+def u1():
+    global users, usernames, user_links
+    for user in users:
+        user_id = user['user_id']
+        username = user['username']
+        user_link = user['user_link']
+        usernames[user_id] = username
+        user_links[user_id] = user_link
+
+def u2():
+    global users, usernames, user_links
+    for key in usernames.keys():
+        user = {}
+        user['user_id'] = key
+        user['username'] = usernames[key]
+        if key in user_links.keys():
+            user['user_link'] = user_links[key]
+
+def getClient():
+    global host, port
+    client = MongoClient(host, port)
+    return client
 
 def update_dict(id, username):
     global usernames
@@ -58,25 +87,39 @@ def check(soup):
                     break
 
 def load():
-    global usernames, links, user_links
-    try:
-        usernames = json.load(open('usernames.txt'))
-    except ValueError:
-        pass
-    try:
-        links = json.load(open('links.txt'))
-    except ValueError:
-        pass
-    try:
-        user_links = json.load(open('user_links.txt'))
-    except ValueError:
-        pass
+    global users, usernames, links, user_links, link, databaseName
+    client = getClient()
+    db = client[databaseName]
+    userCollection = db['users']
+    linkCollection = db['links']
+
+    cursor = userCollection.find()
+    for doc in cursor:
+        users.append(doc)
+
+    cursor = linkCollection.find()
+    for doc in cursor:
+        links.append(doc['link'])
+    link = links[len(links)-1]
+
+    client.close()
+    u1()
 
 def save():
-    global usernames, links, user_links
-    json.dump(usernames, open('usernames.txt', 'w'))
-    json.dump(links, open('links.txt', 'w'))
-    json.dump(user_links, open('user_links.txt', 'w'))
+    global users, links, databaseName
+    u2()
+
+    client = getClient()
+    db = client[databaseName]
+    userCollection = db['users']
+    linkCollection = db['links']
+
+    for user in users:
+        userCollection.update({'user_id': user['user_id']}, user, upsert=True)
+    for link_ in links:
+        linkCollection.update({'link': link_}, {'link': link_}, upsert=True)
+
+    client.close()
 
 def start(bot, update):
     global b,usernames,user_links,links
@@ -105,7 +148,6 @@ def stop(bot, update):
         i1 = update.message.chat_id
         remove_user(i1)
         update.message.reply_text('Sad to see you go.')
-
 
 def add_user(id):
     global user_links
@@ -169,7 +211,7 @@ def main():
         soup = bs_source(url)
         check(soup)
         send_messages()
-        sleep(10)
+        sleep(60)
 
     updater.idle()
 
