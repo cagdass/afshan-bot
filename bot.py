@@ -115,6 +115,9 @@ def save(bot, update):
     userCollection = db['users']
     linkCollection = db['links']
 
+    print 'Saving'
+    print users, links
+
     for user in users:
         userCollection.update({'user_id': user['user_id']}, user, upsert=True)
     for link_ in links:
@@ -178,7 +181,7 @@ def send_messages():
                             else:
                                 b.send_photo(chat_id=user, photo=a)
                 except BadRequest:
-                    continue
+                    pass
                 except Unauthorized:
                     if user in usernames:
                         print '{}, {} blocked'.format(user, usernames[user])
