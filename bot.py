@@ -102,7 +102,9 @@ def load():
 
     cursor = linkCollection.find()
     for doc in cursor:
-        links.append(doc['link'])
+        link_ = doc['link']
+        if link_ not in links:
+            links.append(doc['link'])
     link = links[len(links)-1]
 
     client.close()
