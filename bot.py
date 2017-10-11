@@ -130,8 +130,7 @@ def start(bot, update):
     global b,usernames,user_links,links
     i1 = update.message.chat_id
     i2 = update.message.from_user.username
-    update_dict(i1,i2)
-    add_user(i1)
+
     if update.message.from_user.username == 'cagdas':
         b = bot
         update.message.reply_text('Bot set')
@@ -142,6 +141,8 @@ def start(bot, update):
     elif update.message.from_user.username == 'abdullahwali':
         message = 'Shut the fuck up Wali'
         update.message.reply_text(message)
+    update_dict(i1,i2)
+    add_user(i1)
     message = 'I\'m a Telegram Bot to update you whenever something new Afshan wrote is published\nSay /stop for me to stop.'
     update.message.reply_text(message)
 
