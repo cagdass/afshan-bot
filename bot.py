@@ -70,6 +70,7 @@ def read_article(url):
             for img in imgs:
                 articles.append(img.get('src'))
         articles.append(p.text)
+    print articles
     return articles
 
 def check(soup):
@@ -105,7 +106,7 @@ def load():
     client.close()
     u1()
 
-def save():
+def save(bot, update):
     global users, links, databaseName
     u2()
 
@@ -171,10 +172,11 @@ def send_messages():
                 try:
                     for i in xrange(len(articles)):
                         a = articles[i]
-                        if 'http' not in a:
-                            b.send_message(chat_id=user, text=a)
-                        else:
-                            b.send_photo(chat_id=user, photo=a)
+                        if a:
+                            if 'http' not in a:
+                                b.send_message(chat_id=user, text=a)
+                            else:
+                                b.send_photo(chat_id=user, photo=a)
                 except Unauthorized:
                     if user in usernames:
                         print '{}, {} blocked'.format(user, usernames[user])
@@ -195,6 +197,7 @@ def main():
     dp = updater.dispatcher
 
     dp.add_handler(CommandHandler("start", start))
+    dp.add_handler(CommandHandler("save", save))
     dp.add_handler(CommandHandler("stop", stop))
 
     dp.add_error_handler(error)
