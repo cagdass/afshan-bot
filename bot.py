@@ -171,8 +171,8 @@ def send_messages():
             if link not in user_links[user]:
                 try:
                     for i in xrange(len(articles)):
-                        a = articles[i].encode('ascii', 'ignore')
-                        if a:
+                        a = articles[i]
+                        if a.encode('ascii', 'ignore'):
                             if 'http' not in a:
                                 b.send_message(chat_id=user, text=a)
                             else:
