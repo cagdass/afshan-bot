@@ -182,6 +182,7 @@ def send_messages():
                             else:
                                 b.send_photo(chat_id=user, photo=a)
                 except BadRequest:
+                    print 'Bad request'
                     pass
                 except Unauthorized:
                     if user in usernames:
