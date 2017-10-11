@@ -177,6 +177,8 @@ def send_messages():
                                 b.send_message(chat_id=user, text=a)
                             else:
                                 b.send_photo(chat_id=user, photo=a)
+                except BadRequest:
+                    continue
                 except Unauthorized:
                     if user in usernames:
                         print '{}, {} blocked'.format(user, usernames[user])
