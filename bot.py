@@ -27,6 +27,7 @@ b = ''
 
 def u1():
     global users, usernames, user_links
+    print 'u1()'
     for user in users:
         user_id = user['user_id']
         username = user['username']
@@ -36,6 +37,7 @@ def u1():
 
 def u2():
     global users, usernames, user_links
+    print 'u2()'
     for key in usernames.keys():
         user = {}
         user['user_id'] = key
@@ -127,18 +129,18 @@ def save(bot, update):
     client.close()
 
 def start(bot, update):
-    global b,usernames,user_links,links
+    global b, usernames, user_links, links
     i1 = update.message.chat_id
     i2 = update.message.from_user.username
 
-    if update.message.from_user.username == 'cagdas':
+    if i2 == 'cagdas':
         b = bot
         update.message.reply_text('Bot set')
         print 'Preload {} {} {}'.format(usernames,user_links,links)
         load()
         print 'Postload {} {} {}'.format(usernames,user_links,links)
         update.message.reply_text('Loaded')
-    elif update.message.from_user.username == 'abdullahwali':
+    elif i2 == 'abdullahwali':
         message = 'Shut the fuck up Wali'
         update.message.reply_text(message)
     update_dict(i1,i2)
