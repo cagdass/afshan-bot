@@ -113,6 +113,9 @@ def load():
     u1()
 
 def save(bot, update):
+    save()
+
+def save():
     global users, links, databaseName, usernames, user_links
     u2()
 
@@ -190,8 +193,11 @@ def send_messages():
                                     b.send_message(chat_id=user, text=a)
                                 else:
                                     b.send_photo(chat_id=user, photo=a)
-                    except BadRequest:
+                    except BadRequest as inst:
                         print 'Bad request'
+                        print type(inst
+                        print inst.args
+                        print inst
                         pass
                     except Unauthorized:
                         if user in usernames:
@@ -200,6 +206,7 @@ def send_messages():
                             print '{} blocked'.format(user)
 
                     user_links[user].append(link)
+    save()
 
 def main():
     global usernames,user_links,links,link,canStop,t
