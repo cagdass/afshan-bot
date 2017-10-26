@@ -188,14 +188,14 @@ def send_messages():
                     try:
                         for i in xrange(len(articles)):
                             a = articles[i]
-                            if a.encode('ascii', 'ignore'):
+                            if a.encode('ascii', 'ignore') and len(a) > 0:
                                 if 'http' not in a:
                                     b.send_message(chat_id=user, text=a)
                                 else:
                                     b.send_photo(chat_id=user, photo=a)
                     except BadRequest as inst:
                         print 'Bad request'
-                        print type(inst
+                        print type(inst)
                         print inst.args
                         print inst
                         pass
