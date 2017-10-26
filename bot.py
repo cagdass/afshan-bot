@@ -17,6 +17,7 @@ host = 'localhost'
 port = 27017
 databaseName = 'afshanbot'
 
+t = 60
 users = []
 usernames = {}
 links = []
@@ -174,32 +175,34 @@ def error(bot, update, error):
     logger.warn('Update "%s" caused error "%s"' % (update, error))
 
 def send_messages():
-    global user_links, link, b
-    if link and b:
-        articles = read_article(link)
-        for user in user_links:
-            if link not in user_links[user]:
-                try:
-                    for i in xrange(len(articles)):
-                        a = articles[i]
-                        if a.encode('ascii', 'ignore'):
-                            if 'http' not in a:
-                                b.send_message(chat_id=user, text=a)
-                            else:
-                                b.send_photo(chat_id=user, photo=a)
-                except BadRequest:
-                    print 'Bad request'
-                    pass
-                except Unauthorized:
-                    if user in usernames:
-                        print '{}, {} blocked'.format(user, usernames[user])
-                    else:
-                        print '{} blocked'.format(user)
+    global user_links, links, b, t
+    for link in links:
+        if link and b:
+            articles = read_article(link)
+            for user in user_links:
+                if link not in user_links[user]:
+                    t = 60
+                    try:
+                        for i in xrange(len(articles)):
+                            a = articles[i]
+                            if a.encode('ascii', 'ignore'):
+                                if 'http' not in a:
+                                    b.send_message(chat_id=user, text=a)
+                                else:
+                                    b.send_photo(chat_id=user, photo=a)
+                    except BadRequest:
+                        print 'Bad request'
+                        pass
+                    except Unauthorized:
+                        if user in usernames:
+                            print '{}, {} blocked'.format(user, usernames[user])
+                        else:
+                            print '{} blocked'.format(user)
 
-                user_links[user].append(link)
+                    user_links[user].append(link)
 
 def main():
-    global usernames,user_links,links,link,canStop
+    global usernames,user_links,links,link,canStop,t
 
     with open('config.json') as config:
         c = json.load(config)
@@ -227,7 +230,8 @@ def main():
         soup = bs_source(url)
         check(soup)
         send_messages()
-        sleep(60)
+        sleep(t)
+        t += 1
 
     updater.idle()
 
